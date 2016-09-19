@@ -1,0 +1,52 @@
+<html>
+		<head>
+				<title>Krantenkoppen</title>
+				<link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+		</head>
+
+
+		<body>
+				<div id="wrap">
+						<h1>Krantenkoppen van {{publicatie}}</h1>
+                        <h2>Het weer in {{weather.city}} ({{weather.country}})</h2>
+						<p><b>{{weather.description}} | {{weather.temperature}}&#8451</b></p>
+                        <h2>Muntomzetting</h2>
+                        1 {{currency_from}} = {{currency_to}} {{rate}}
+
+                        <form> 
+								<input type="text" name="publication" placeholder="search" />
+								<select name="feed">
+										{% for feed in keys %}
+										<option value="{{feed}}">{{feed}}</option>
+										{%endfor%}
+
+
+								<input type="text" name="city" placeholder="weather search" />
+                                <br />
+                                <select name="currency_from"> 
+                                    {% for currency in currencies %}
+                                    <option value="{{currency}}"
+                                    {{'selected="selected' if currency_from==currency}}>
+                                    {{currency}}</option>
+                                    {%endfor%}
+                                </select>
+
+                                <select name="currency_to">
+                                    {% for currency in currencies %}
+                                    <option value="{{currency}}" 
+                                    {{'selected="selected' if currency_to==currency}}>
+                                    {{currency}}</option>
+                                    {% endfor %}
+                                </select>
+								<input type="submit" value="Submit"	/>
+						</form>
+						{% for item in articles %}
+						<b><a href="{{item.link}}">{{item.title}}</a></b><br />
+						<i>{{item.published}}</i><br />
+						<p>{{item.summary}}</p>
+						<hr class="styled" />
+						{% endfor %}
+				</div>
+		</body>
+</html>
+
