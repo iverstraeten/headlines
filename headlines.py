@@ -76,7 +76,9 @@ def home():
         currency_to = defaults['currency_to']
     rate, currencies = get_rate(currency_from, currency_to)
 
-    return render_template("home.html", articles=articles, weather=weather, publicatie=publication.upper(), rate=rate, currencies = sorted(currencies), feeds=feeds)
+    return render_template("home.html", articles=articles, weather=weather, 
+		    publicatie=publication.upper(), rate=rate, currencies = sorted(currencies), feeds=feeds,
+		    keys=feeds.keys() )
 
 def get_news(query):
     if not query or query.lower() not in feeds:
@@ -87,4 +89,4 @@ def get_news(query):
     return feed['entries'] 
             
 if __name__ == '__main__':
-    app.run(port=5000, debug=True)
+    app.run(port=80, debug=True)
