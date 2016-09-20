@@ -20,6 +20,7 @@ weatherUrl = 'http://api.openweathermap.org/data/2.5/weather?q={}&units=metric&a
 feeds = {'standaard': 'http://www.standaard.be' \
         '/rss/section/1f2838d4-99ea-49f0-9102-138784c7ea7',
         'deredactie': 'http://deredactie.be/cm/vrtnieuws?mode=atom',
+	'techzine': 'http://feeds.techzine.nl/techzine/nieuws?format=xml',
         'volkskrant': 'http://www.volkskrant.nl/nieuws-voorpagina/rss.xml',
         'hln': 'http://www.hln.be/rss.xml',
         'tijd': 'http://www.tijd.be/rss/top_stories.xml',
