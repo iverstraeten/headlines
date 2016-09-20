@@ -17,7 +17,8 @@ defaults = {'publication':'standaard',
 currencyUrl = "https://openexchangerates.org/api/latest.json?app_id=8b7e1d43c0ce410981a06ac374c6565d"
 weatherUrl = 'http://api.openweathermap.org/data/2.5/weather?q={}&units=metric&appid=cf6a1af0983b8ed91c5c8086f2e0db02'
 
-feeds = {'standaard': 'http://www.standaard.be' \
+feeds = {'yandex': 'https://news.yandex.ua/index.uk.rss',
+	'standaard': 'http://www.standaard.be' \
         '/rss/section/1f2838d4-99ea-49f0-9102-138784c7ea7',
         'deredactie': 'http://deredactie.be/cm/vrtnieuws?mode=atom',
 	'techzine': 'http://feeds.techzine.nl/techzine/nieuws?format=xml',

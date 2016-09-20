@@ -11,18 +11,15 @@
                         <h2>Het weer in {{weather.city}} ({{weather.country}})</h2>
 						<p><b>{{weather.description}} | {{weather.temperature}}&#8451</b></p>
                         <h2>Muntomzetting</h2>
-                        1 {{currency_from}} = {{currency_to}} {{rate}}
-
+			<p>1 {{currency_from}} = {{currency_to}} {{rate}}</p>
                         <form> 
-								<input type="text" name="publication" placeholder="search" />
-								<select name="feed">
-										{% for feed in keys %}
-										<option value="{{feed}}">{{feed}}</option>
-										{%endfor%}
-
-
-								<input type="text" name="city" placeholder="weather search" />
-                                <br />
+				<input type="text" name="publication" placeholder="feed search" />
+				<select name="feed">
+						{% for feed in keys %}
+						<option value="{{feed}}">{{feed}}</option>
+						{%endfor%}
+				<input type="text" name="city" placeholder="weather search" />
+				<br />
                                 <select name="currency_from"> 
                                     {% for currency in currencies %}
                                     <option value="{{currency}}"
@@ -38,8 +35,8 @@
                                     {{currency}}</option>
                                     {% endfor %}
                                 </select>
-								<input type="submit" value="Submit"	/>
-						</form>
+				<input type="submit" value="Submit"/>
+			</form>
 						{% for item in articles %}
 						<b><a href="{{item.link}}">{{item.title}}</a></b><br />
 						<i>{{item.published}}</i><br />
