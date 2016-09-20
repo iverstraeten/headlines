@@ -10,7 +10,7 @@ import urllib2
 app = Flask(__name__)
 
 defaults = {'publication':'standaard',
-        'city':'Dendermonde',
+        'city':'Antwerpen',
         'currency_from': 'EUR',
         'currency_to': 'USD'}
 
@@ -54,10 +54,11 @@ def get_weather(query):
 def home():
     #get the headlines < user input
     #retrieve the newspaper using GET
+
     publication = request.args.get('publication')
-    # if nothing is entered use 'standaard'
     if not publication:
-        publication = defaults['publication']
+	    publication = defaults['publication']
+    # if nothing is entered use 'standaard'
     articles = get_news(publication)
     
     for article in articles:
@@ -79,14 +80,11 @@ def home():
     rate, currencies = get_rate(currency_from, currency_to)
 
     return render_template("home.html", articles=articles, weather=weather, 
-		    publicatie=publication.upper(), rate=rate, currencies = sorted(currencies), feeds=feeds,
-		    keys=feeds.keys() )
+		    publicatie=publication, rate=rate, currencies = sorted(currencies), feeds=feeds,
+		    keys=feeds.keys(),currency_from=currency_from, currency_to=currency_to )
 
 def get_news(query):
-    if not query or query.lower() not in feeds:
-        publication = defaults["publication"]
-    else:
-        publication = query.lower()
+    publication = query.lower()
     feed = feedparser.parse((feeds[publication]).encode('utf-8'))
     return feed['entries'] 
             

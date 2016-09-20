@@ -8,18 +8,17 @@
 		<body>
 				<div id="wrap">
 						<h1>Krantenkoppen van {{publicatie}}</h1>
-                        <h2>Het weer in {{weather.city}} ({{weather.country}})</h2>
-						<p><b>{{weather.description}} | {{weather.temperature}}&#8451</b></p>
-                        <h2>Muntomzetting</h2>
-			<p>1 {{currency_from}} = {{currency_to}} {{rate}}</p>
+						<h2>Het weer in {{weather.city}} ({{weather.country}}) {{weather.description}} | {{weather.temperature}}&#8451</h2>
                         <form> 
-				<input type="text" name="publication" placeholder="feed search" />
-				<select name="feed">
-						{% for feed in keys %}
-						<option value="{{feed}}">{{feed}}</option>
-						{%endfor%}
-				<input type="text" name="city" placeholder="weather search" />
-				<br />
+				<input type="text" name="city" placeholder="weather search" /> Feed: 
+				<select name="publication">
+					{% for feed in keys %}
+					<option value="{{feed}}">{{feed}}</option>
+					{%endfor%}
+				</select>
+
+				<h2>Muntomzetting 1 {{currency_from}} = {{currency_to}} {{rate}}</h2>
+
                                 <select name="currency_from"> 
                                     {% for currency in currencies %}
                                     <option value="{{currency}}"
@@ -35,6 +34,7 @@
                                     {{currency}}</option>
                                     {% endfor %}
                                 </select>
+
 				<input type="submit" value="Submit"/>
 			</form>
 						{% for item in articles %}
