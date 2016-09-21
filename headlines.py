@@ -45,6 +45,7 @@ def home():
     
     for article in articles:
         article.summary = re.sub('<[^<]+?>', '', article.summary)
+	article.summary = article.summary.replace('&#8226;', '')
 
     #get the city < user in put
     # retrieve it using GET
