@@ -1,11 +1,9 @@
-import feedparser
-import re
+import feedparser, datetime, re, json, urllib, urllib2
 from flask import render_template
 from flask import Flask
 from flask import request
-import json
-import urllib
-import urllib2
+from apiKeys import weatherUrl, currencyUrl
+from feeds import feeds
 
 app = Flask(__name__)
 
@@ -13,22 +11,6 @@ defaults = {'publication':'standaard',
         'city':'Antwerpen',
         'currency_from': 'EUR',
         'currency_to': 'USD'}
-
-currencyUrl = "https://openexchangerates.org/api/latest.json?app_id=8b7e1d43c0ce410981a06ac374c6565d"
-weatherUrl = 'http://api.openweathermap.org/data/2.5/weather?q={}&units=metric&appid=cf6a1af0983b8ed91c5c8086f2e0db02'
-
-feeds = {'wiadomosci': 'http://wiadomosci.wp.pl/ver,rss,rss.xml',
-	'yandex': 'https://news.yandex.ua/index.uk.rss',
-	'standaard': 'http://www.standaard.be' \
-        '/rss/section/1f2838d4-99ea-49f0-9102-138784c7ea7',
-        'deredactie': 'http://deredactie.be/cm/vrtnieuws?mode=atom',
-	'techzine': 'http://feeds.techzine.nl/techzine/nieuws?format=xml',
-        'volkskrant': 'http://www.volkskrant.nl/nieuws-voorpagina/rss.xml',
-        'hln': 'http://www.hln.be/rss.xml',
-        'tijd': 'http://www.tijd.be/rss/top_stories.xml',
-        'knack': 'http://datanews.knack.be/ict/nieuws/feed.rss',
-        'newsru':'http://rss.newsru.com/top/main/',
-        'tweakers': 'http://feeds.feedburner.com/tweakers/mixed'}
 
 def get_rate(frm, to):
     all_currencies = urllib2.urlopen(currencyUrl).read()
@@ -89,4 +71,4 @@ def get_news(query):
     return feed['entries'] 
             
 if __name__ == '__main__':
-    app.run(port=80, debug=True)
+	app.run(port=5000, debug=True)
