@@ -1,14 +1,13 @@
 import feedparser, datetime, re, json, urllib, urllib2
-from flask import render_template
-from flask import Flask
-from flask import request
+from flask import jsonify
+from flask import render_template, Flask, request, make_response
 from apiKeys import weatherUrl, currencyUrl
 from feeds import feeds
 
 app = Flask(__name__)
 
-defaults = {'publication':'standaard',
-        'city':'Antwerpen',
+DEFAULTS = {'publication':'hln',
+        'city':'New York',
         'currency_from': 'EUR',
         'currency_to': 'USD'}
 
@@ -32,44 +31,65 @@ def get_weather(query):
                 'country': parsed['sys']['country']}
         return weather
 
-@app.route("/", methods=['GET', 'POST'])
-def home():
-    #get the headlines < user input
-    #retrieve the newspaper using GET
-
-    publication = request.args.get('publication')
-    if not publication:
-	    publication = defaults['publication']
-    # if nothing is entered use 'standaard'
-    articles = get_news(publication)
-    
-    for article in articles:
-        article.summary = re.sub('<[^<]+?>', '', article.summary)
-	article.summary = article.summary.replace('&#8226;', '')
-
-    #get the city < user in put
-    # retrieve it using GET
-    city = request.args.get('city')
-    if not city:
-        city = defaults['city']
-    weather = get_weather(city)
-
-    currency_from = request.args.get("currency_from")
-    if not currency_from:
-        currency_from = defaults['currency_from']
-    currency_to = request.args.get('currency_to')
-    if not currency_to:
-        currency_to = defaults['currency_to']
-    rate, currencies = get_rate(currency_from, currency_to)
-
-    return render_template("home.html", articles=articles, weather=weather, 
-		    publicatie=publication, rate=rate, currencies = sorted(currencies), feeds=feeds,
-		    keys=feeds.keys(),currency_from=currency_from, currency_to=currency_to )
+def get_value_with_fallback(key):
+	if request.args.get(key):
+		return request.args.get(key)
+	if request.cookies.get(key):
+		return request.cookies.get(key)
+	return DEFAULTS[key] 
+def clean_articles(articles):
+	for article in articles:
+        	article.summary = re.sub('<[^<]+?>', '', article.summary)
+		article.summary = article.summary.replace('&#8226;', '-')
+		article.summary = article.summary.replace(
+				'wiadomosci.wp.pl','')
+	return articles
 
 def get_news(query):
     publication = query.lower()
     feed = feedparser.parse((feeds[publication]).encode('utf-8'))
     return feed['entries'] 
-            
+ 
+@app.route("/get_my_ip", methods=["GET"])
+def get_my_ip():
+	return jsonify({'ip': request.remote_addr}), 200
+
+@app.route("/")
+def home():
+    #get the headlines < user input
+    #retrieve the newspaper using GET
+
+    publication = get_value_with_fallback("publication")
+    articles = get_news(publication)
+    articles = clean_articles(articles)
+
+    #get the city < user in put
+    # retrieve it using GET
+    city = get_value_with_fallback("city")
+    weather = get_weather(city)
+
+    currency_from = get_value_with_fallback("currency_from")
+    currency_to = get_value_with_fallback("currency_to")
+    rate, currencies = get_rate(currency_from, currency_to)
+
+    response = make_response(render_template("home.html", 
+	    articles=articles, 
+	    weather=weather,
+	    publicatie=publication, 
+	    rate=rate, 
+	    currencies = sorted(currencies), 
+	    feeds=feeds,
+	    keys=feeds.keys(),
+	    currency_from=currency_from, 
+	    currency_to=currency_to))
+    expires = datetime.datetime.now() + datetime.timedelta(days=365)
+    response.set_cookie("publication", publication, expires=expires)
+    response.set_cookie("city", city, expires=expires)
+    response.set_cookie("currency_from",
+		    currency_from, expires=expires)
+    response.set_cookie("currency_to", currency_to, expires=expires)
+    return response
+
+           
 if __name__ == '__main__':
 	app.run(port=5000, debug=True)

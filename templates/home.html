@@ -1,6 +1,6 @@
 <html>
 		<head>
-				<title>Krantenkoppen</title>
+				<title>news | money | weather</title>
 				<link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 				<link rel="icon" href="data:;base64,iVBORw0KGgo=">
 				<meta charset="utf-8">
@@ -28,7 +28,7 @@
 			    <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
 			    <div class="container center-block"><div class="row">
 					    <div class="col-xs-12">
-						<h1>Krantenkoppen van {{publicatie}}</h1>
+						<h1>newsfeed {{publicatie}}</h1>
 						<h5>Het weer in {{weather.city}} ({{weather.country}}) {{weather.description}} | {{weather.temperature}}&#8451</h5>
                         <form> 
 				<input type="text" name="city" placeholder="weather search" /> Feed: 
